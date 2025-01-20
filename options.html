@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Detection Settings</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background-color: #212121; color: #FFFFFF}
+    label { display: block; margin: 10px 0 5px; }
+    input[type="number"] { width: 100px; }
+    button { margin-top: 10px; }
+    h1 {color: #FFFFFF}
+  </style>
+</head>
+<body>
+  <h1>Flash Detection Settings</h1>
+  <label for="checkInterval">Check Interval (ms):</label>
+  <input id="checkInterval" type="number" value="200" />
+
+  <label for="flashThreshold">Flash Threshold:</label>
+  <input id="flashThreshold" type="number" value="200" />
+
+  <label for="observationDuration">Observation Duration (ms):</label>
+  <input id="observationDuration" type="number" value="1800000" />
+
+  <button id="saveSettings">Save</button>
+  <script src="options.js"></script>
+</body>
+</html>
