@@ -1,7 +1,6 @@
 let settings = {
   checkInterval: 1000 / 60, // 60 fps
-  flashesRateThreshold: 30,
-  observationDuration: 3, // 30 seconds
+  flashesHz: 30,
 };
 
 // NOTE: Explore how to improve performance - Increase pixelsCount?
@@ -13,7 +12,7 @@ function analyzeFrameLuminance(context, width, height) {
 
   let totalLuminance = 0;
   let sampledPixels = 0;
-  const pixelsCount = 4;
+  const pixelsCount = 1;
 
   for (let i = 0; i < pixels.length; i += 4 * pixelsCount) {
     const r = pixels[i]; // Red
@@ -35,7 +34,7 @@ function analyzeFrameLuminance(context, width, height) {
 function main() {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", { willReadFrequently: true });
-  const luminancePercentThreshold = 20;
+  const luminancePercentThreshold = 50;
   let flashingElements = new Map();
 
   function checkElement(element) {
@@ -67,31 +66,33 @@ function main() {
           lastCheckTime: Date.now(),
         };
 
+        const timeDiff = Date.now() - stats.startTime;
+
+        if (timeDiff > 1000) {
+          flashingElements.delete(element);
+          return false;
+        }
+
         const luminanceDiff = Math.abs(currentLuminance - stats.lastLuminance);
         const percentChange = (luminanceDiff / stats.lastLuminance) * 100;
 
         if (percentChange > luminancePercentThreshold) {
-          stats.changes++;
+          stats.changes += 1;
         }
-
-        stats.lastLuminance = currentLuminance;
-        stats.lastCheckTime = Date.now();
 
         const elapsed = Date.now() - stats.startTime;
         const flashesRate = stats.changes / (elapsed / 1000);
 
+        stats.lastLuminance = currentLuminance;
+        stats.lastCheckTime = Date.now();
         flashingElements.set(element, stats);
 
-        console.log({
-          flashesRate,
-          stats,
-          elapsed,
-          tot: (30 * elapsed) / 1000,
-          element,
-        });
-        // hzthresh * elapsed /1000s
-        if (flashesRate > (30 * elapsed) / 1000) {
-          console.log("Flashing element detected");
+        if (
+          flashesRate > (settings.flashesHz * elapsed) / 1000 &&
+          stats.changes >= 3
+        ) {
+          alert("Flashing element detected");
+          console.log({ stats });
           console.log(element);
           return true;
         }
@@ -109,8 +110,12 @@ function main() {
 
           checkElement(node);
 
-          node.querySelectorAll("video, img, canvas").forEach(checkElement);
+          // node.querySelectorAll("video, img, canvas").forEach(checkElement);
         });
+      }
+
+      if (mutation.type === "attributes") {
+        flashingElements.delete(mutation.target);
       }
     }
   });
