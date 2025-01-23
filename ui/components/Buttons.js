@@ -1,13 +1,12 @@
 const buttonStyles = {
   base: {
     padding: "10px 20px",
-    border: "1px solid #FF8540",
+    border: "1px solid #8239BC",
     borderRadius: "37px",
     cursor: "pointer",
-    transition: "background 0.2s",
   },
   primary: {
-    background: "#FF8540",
+    background: "#8239BC",
     color: "#fff",
   },
   secondary: {
@@ -33,25 +32,7 @@ class Button {
     return this;
   }
 
-  setHover(hoverStyles, defaultStyles) {
-    this.addListener("mouseenter", () =>
-      this.applyStyles({ ...this.styles, ...hoverStyles })
-    ).addListener("mouseleave", () =>
-      this.applyStyles({ ...this.styles, ...defaultStyles })
-    );
-    return this;
-  }
-
   render() {
     return this.element;
   }
 }
-
-const createPrimaryButton = ({ text, onClick }) =>
-  new Button(text).addListener("click", onClick).render();
-
-const createSecondaryButton = ({ text, onClick }) =>
-  new Button(text, "secondary")
-    .setHover(buttonStyles.primary, buttonStyles.secondary)
-    .addListener("click", onClick)
-    .render();

@@ -63,7 +63,13 @@ function main() {
           flashesRate > (settings.flashesHz * elapsed) / 1000 &&
           stats.changes >= 3
         ) {
+          element.style.display = "none";
+          if (element.tagName === "VIDEO") {
+            element.pause();
+          }
+
           document.body.appendChild(warning);
+
           return true;
         }
       } catch (error) {

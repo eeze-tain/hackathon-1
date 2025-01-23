@@ -23,7 +23,7 @@ warningBox.style.cssText = `
     box-shadow: 0px 4px 20px 0px #00000099;
   `;
 
-const title = document.createElement("h2");
+const title = document.createElement("h1");
 title.textContent = "⚠️ Warning: Flashing Content Detected";
 title.style.cssText = `
     color: #000;
@@ -51,15 +51,13 @@ buttonGroup.style.cssText = `
     gap: 16px;
   `;
 
-const primaryButton = createPrimaryButton({
-  text: "CONTINUE",
-  onClick: () => overlay.remove(),
-});
+const primaryButton = new Button("CONTINUE")
+  .addListener("click", () => overlay.remove())
+  .render();
 
-const secondaryButton = createSecondaryButton({
-  text: "Cancel",
-  onClick: () => overlay.remove(),
-});
+const secondaryButton = new Button("Cancel", "secondary")
+  .addListener("click", () => overlay.remove())
+  .render();
 
 warningBox.appendChild(title);
 warningBox.appendChild(message);
