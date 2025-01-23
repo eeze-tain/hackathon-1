@@ -3,39 +3,11 @@ let settings = {
   flashesHz: 30,
 };
 
-// NOTE: Explore how to improve performance - Increase pixelsCount?
-function analyzeFrameLuminance(context, width, height) {
-  const imageData = context.getImageData(0, 0, width, height, {
-    willReadFrequently: true,
-  });
-  const pixels = imageData.data;
-
-  let totalLuminance = 0;
-  let sampledPixels = 0;
-  const pixelsCount = 1;
-
-  for (let i = 0; i < pixels.length; i += 4 * pixelsCount) {
-    const r = pixels[i]; // Red
-    const g = pixels[i + 1]; // Green
-    const b = pixels[i + 2]; // Blue
-
-    const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-
-    // Accumulate the total luminance
-    totalLuminance += luminance;
-    sampledPixels++;
-  }
-
-  const averageLuminance = totalLuminance / sampledPixels;
-
-  return averageLuminance; // Return the average luminance value
-}
-
 function main() {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", { willReadFrequently: true });
   const luminancePercentThreshold = 50;
-  let flashingElements = new Map();
+  let flashingElements = new WeakMap();
 
   function checkElement(element) {
     const elementTypes = [
@@ -91,9 +63,7 @@ function main() {
           flashesRate > (settings.flashesHz * elapsed) / 1000 &&
           stats.changes >= 3
         ) {
-          alert("Flashing element detected");
-          console.log({ stats });
-          console.log(element);
+          document.body.appendChild(Warning);
           return true;
         }
       } catch (error) {
@@ -107,10 +77,7 @@ function main() {
       if (mutation.type === "childList") {
         mutation.addedNodes.forEach((node) => {
           if (!(node instanceof HTMLElement)) return;
-
           checkElement(node);
-
-          // node.querySelectorAll("video, img, canvas").forEach(checkElement);
         });
       }
 
@@ -120,9 +87,11 @@ function main() {
     }
   });
 
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  // document.querySelectorAll("video, img, canvas").forEach(checkElement);
+  observer.observe(document.body, {
+    attributes: true,
+    childList: true,
+    subtree: true,
+  });
 
   setInterval(() => {
     document.querySelectorAll("video, img, canvas").forEach((element) => {
@@ -134,7 +103,6 @@ function main() {
 }
 
 chrome.storage.sync.set(settings, () => {
-  // alert("Settings saved!", settings);
   console.log("Settings saved!", settings);
 });
 
