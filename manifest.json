@@ -18,7 +18,7 @@
       "js": [
         "utils/index.js",
         "ui/components/Buttons.js",
-        "ui/components/Warning.js",
+        "ui/containers/warning.js",
         "content.js"
       ]
     }

@@ -51,15 +51,21 @@ buttonGroup.style.cssText = `
     gap: 16px;
   `;
 
+const primaryButton = createPrimaryButton({
+  text: "CONTINUE",
+  onClick: () => overlay.remove(),
+});
+
+const secondaryButton = createSecondaryButton({
+  text: "Cancel",
+  onClick: () => overlay.remove(),
+});
+
 warningBox.appendChild(title);
 warningBox.appendChild(message);
-buttonGroup.appendChild(
-  Buttons.secondary("Cancel", [["click", () => overlay.remove()]])
-);
-buttonGroup.appendChild(
-  Buttons.primary("CONTINUE", [["click", () => overlay.remove()]])
-);
+buttonGroup.appendChild(secondaryButton);
+buttonGroup.appendChild(primaryButton);
 warningBox.appendChild(buttonGroup);
 overlay.appendChild(warningBox);
 
-const Warning = overlay;
+const warning = overlay;

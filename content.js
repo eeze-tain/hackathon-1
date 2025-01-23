@@ -63,7 +63,7 @@ function main() {
           flashesRate > (settings.flashesHz * elapsed) / 1000 &&
           stats.changes >= 3
         ) {
-          document.body.appendChild(Warning);
+          document.body.appendChild(warning);
           return true;
         }
       } catch (error) {

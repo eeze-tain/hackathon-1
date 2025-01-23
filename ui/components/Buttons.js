@@ -1,64 +1,57 @@
-const Buttons = {
-  _createButton(text, customStyles, eventListeners) {
-    const button = document.createElement("button");
-
-    button.textContent = text;
-    button.style.cssText = Object.entries({
-      ...this._baseStyles,
-      ...customStyles,
-    })
-      .map(([key, value]) => `${key}: ${value};`)
-      .join("");
-
-    if (eventListeners?.length > 0) {
-      eventListeners.forEach(([event, listener]) => {
-        button.addEventListener(event, listener);
-      });
-    }
-
-    return button;
-  },
-  _baseStyles: {
+const buttonStyles = {
+  base: {
     padding: "10px 20px",
     border: "1px solid #FF8540",
-    "border-radius": "37px",
+    borderRadius: "37px",
     cursor: "pointer",
     transition: "background 0.2s",
   },
-  primaryStyles: {
+  primary: {
     background: "#FF8540",
     color: "#fff",
   },
-  secondaryStyles: {
+  secondary: {
     background: "#fff",
     color: "#000",
   },
-
-  primary(text, eventListeners) {
-    const primary = this._createButton(
-      text,
-      this.primaryStyles,
-      eventListeners
-    );
-
-    return primary;
-  },
-  secondary(text, eventListeners) {
-    const secondary = this._createButton(
-      text,
-      this.secondaryStyles,
-      eventListeners
-    );
-
-    secondary.addEventListener("mouseenter", () => {
-      secondary.style.background = this.primaryStyles.background;
-      secondary.style.color = this.primaryStyles.color;
-    });
-    secondary.addEventListener("mouseleave", () => {
-      secondary.style.background = this.secondaryStyles.background;
-      secondary.style.color = this.secondaryStyles.color;
-    });
-
-    return secondary;
-  },
 };
+
+class Button {
+  constructor(text, variant = "primary") {
+    this.element = document.createElement("button");
+    this.styles = buttonStyles[variant];
+    this.element.textContent = text;
+    this.applyStyles(this.styles);
+  }
+
+  applyStyles(styles) {
+    Object.assign(this.element.style, { ...buttonStyles.base, ...styles });
+  }
+
+  addListener(event, handler) {
+    this.element.addEventListener(event, handler);
+    return this;
+  }
+
+  setHover(hoverStyles, defaultStyles) {
+    this.addListener("mouseenter", () =>
+      this.applyStyles({ ...this.styles, ...hoverStyles })
+    ).addListener("mouseleave", () =>
+      this.applyStyles({ ...this.styles, ...defaultStyles })
+    );
+    return this;
+  }
+
+  render() {
+    return this.element;
+  }
+}
+
+const createPrimaryButton = ({ text, onClick }) =>
+  new Button(text).addListener("click", onClick).render();
+
+const createSecondaryButton = ({ text, onClick }) =>
+  new Button(text, "secondary")
+    .setHover(buttonStyles.primary, buttonStyles.secondary)
+    .addListener("click", onClick)
+    .render();
