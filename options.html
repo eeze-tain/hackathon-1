@@ -1,29 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flash Detection Settings</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; background-color: #212121; color: #FFFFFF}
-    label { display: block; margin: 10px 0 5px; }
-    input[type="number"] { width: 100px; }
-    button { margin-top: 10px; }
-    h1 {color: #FFFFFF}
+    body {
+      font-family: Arial, sans-serif;
+      margin: 70px;
+      background-color: #212121;
+      color: #FFFFFF
+    }
+
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: 700;
+    }
+
+    input[type="number"] {
+      height: 30px;
+      width: 200px;
+      border-radius: 8px;
+      border: 1px solid rgba(217, 217, 217, 1);
+      color: rgba(255, 255, 255, 1);
+      background: rgba(41, 41, 41, 1);
+      padding-left: 10px;
+      margin: 10px 0px;
+    }
+
+    button {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 1);
+      width: 150px;
+      height: 35px;
+      border-radius: 20px;
+    }
+
+    h1 {
+      color: #FFFFFF
+    }
+
+    #container {
+      background-color: black;
+      padding: 20px;
+      border-radius: 10px;
+      height: 350px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+
+    #desc {
+      color: rgba(183, 183, 183, 1);
+    }
   </style>
 </head>
+
 <body>
   <h1>Flash Detection Settings</h1>
-  <label for="checkInterval">Check Interval (ms):</label>
-  <input id="checkInterval" type="number" value="200" />
+  <div id="container">
+    <label for="checkInterval">Check Interval (ms):</label>
+    <div class="desc">The interval in milliseconds at which the system checks for flashes.</div>
+    <input id="checkInterval" type="number" value="200" />
 
-  <label for="flashThreshold">Flash Threshold:</label>
-  <input id="flashThreshold" type="number" value="200" />
+    <label for="flashThreshold">Flash Threshold:</label>
+    <div class="desc">The threshold value for detecting a flash event.</div>
+    <input id="flashThreshold" type="number" value="200" />
 
-  <label for="observationDuration">Observation Duration (ms):</label>
-  <input id="observationDuration" type="number" value="1800000" />
+    <label for="observationDuration">Observation Duration (ms):</label>
+    <div class="desc">The duration in milliseconds over which observations are made.</div>
+    <input id="observationDuration" type="number" value="1800000" />
 
-  <button id="saveSettings">Save</button>
+    <button id="saveSettings">Save</button>
+  </div>
+
   <script src="options.js"></script>
+  </div>
 </body>
+
 </html>
