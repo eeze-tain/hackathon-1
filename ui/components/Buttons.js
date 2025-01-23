@@ -34,11 +34,6 @@ const Buttons = {
     color: "#000",
   },
 
-  /**
-   * @param {string} text
-   * @param {Function} onClick
-   * @returns {HTMLButtonElement}
-   */
   primary(text, eventListeners) {
     const primary = this._createButton(
       text,
@@ -48,12 +43,6 @@ const Buttons = {
 
     return primary;
   },
-
-  /**
-   * @param {string} text
-   * @param {Function} onClick
-   * @returns {HTMLButtonElement}
-   */
   secondary(text, eventListeners) {
     const secondary = this._createButton(
       text,
