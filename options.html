@@ -32,10 +32,11 @@
 
     button {
       margin-top: 15px;
-      background: rgba(255, 255, 255, 1);
+      background: rgba(130, 57, 188, 1);
       width: 150px;
       height: 35px;
       border-radius: 20px;
+      color: rgba(255, 255, 255, 1);
     }
 
     h1 {
@@ -65,13 +66,13 @@
     <div class="desc">The interval in milliseconds at which the system checks for flashes.</div>
     <input id="checkInterval" type="number" value="200" />
 
-    <label for="flashThreshold">Flash Threshold:</label>
-    <div class="desc">The threshold value for detecting a flash event.</div>
-    <input id="flashThreshold" type="number" value="200" />
+    <label for="flashesPerSecond">Flash Threshold:</label>
+    <div class="desc">The threshold value for detecting a flash event per second.</div>
+    <input id="flashesPerSecond" type="number" value="1" />
 
-    <label for="observationDuration">Observation Duration (ms):</label>
-    <div class="desc">The duration in milliseconds over which observations are made.</div>
-    <input id="observationDuration" type="number" value="1800000" />
+    <label for="luminancePercentThreshold">Luminance Threshold:</label>
+    <div class="desc">The percentage change in luminance required to consider a frame as a flash</div>
+    <input id="luminancePercentThreshold" type="number" value="1" />
 
     <button id="saveSettings">Save</button>
   </div>
