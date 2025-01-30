@@ -1,12 +1,13 @@
 let settings = {
   checkInterval: 1000 / 60, // 60 fps
-  flashesHz: 30,
+  flashesPerSecond: 30,
+  luminancePercentThreshold: 50, 
+
 };
 
 function main() {
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d", { willReadFrequently: true });
-  const luminancePercentThreshold = 50;
   let flashingElements = new WeakMap();
 
   function checkElement(element) {
@@ -48,7 +49,7 @@ function main() {
         const luminanceDiff = Math.abs(currentLuminance - stats.lastLuminance);
         const percentChange = (luminanceDiff / stats.lastLuminance) * 100;
 
-        if (percentChange > luminancePercentThreshold) {
+        if (percentChange > settings.luminancePercentThreshold) {
           stats.changes += 1;
         }
 
@@ -60,7 +61,7 @@ function main() {
         flashingElements.set(element, stats);
 
         if (
-          flashesRate > (settings.flashesHz * elapsed) / 1000 &&
+          flashesRate > (settings.flashesPerSecond * elapsed) / 1000 &&
           stats.changes >= 3
         ) {
           element.style.display = "none";
@@ -108,12 +109,19 @@ function main() {
   }, settings.checkInterval);
 }
 
-chrome.storage.sync.set(settings, () => {
-  console.log("Settings saved!", settings);
+// Function to update settings
+function updateSettings(newSettings) {
+  settings = { ...settings, ...newSettings };
+  console.log("Settings saved!",  settings);
+}
+
+// Listen for the custom event and call updateSettings
+document.addEventListener('settingsChanged', (event) => {
+    updateSettings(event.detail);
 });
 
 // Get settings from storage
 chrome.storage.sync.get(Object.keys(settings), (stored) => {
-  settings = { ...settings, ...stored };
+  updateSettings(stored);
   main();
 });
